@@ -80,11 +80,11 @@ pio run -t upload          # Build + flash to device
 - Prefer `static constexpr` for compile-time constants
 
 ## PM Documentation
-- **Vision**: `pm_docs/VISION.md` — Project background and goals
-- **Dev Plan**: `pm_docs/DEV_PLAN.md` — Milestones and task tracking
-- **Dev Log**: `pm_docs/DEV_LOG.md` — Session logs by build/release
-- Always update Dev Log after completing significant work
-- Always check Dev Plan for current priorities before starting work
+- **Vision**: `pm_docs/VISION.md` — Tiền đề, mục tiêu, scope (ít thay đổi)
+- **Roadmap**: `pm_docs/ROADMAP.md` — Tổng quan các đợt
+- **Per-sprint**: `pm_docs/01-*.md`, `02-*.md`... — Mỗi đợt 1 file (plan + log)
+- Luôn check ROADMAP trước khi bắt đầu đợt mới
+- Cập nhật file đợt sau mỗi session
 
 ## Reference
 - Upstream CLAUDE.md has detailed technical documentation (800+ lines)
