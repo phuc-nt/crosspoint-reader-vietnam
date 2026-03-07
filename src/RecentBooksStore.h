@@ -7,14 +7,15 @@ struct RecentBook {
   std::string title;
   std::string author;
   std::string coverBmpPath;
+  uint8_t progressPercent = 0; // 0-100, cached reading progress
 
-  bool operator==(const RecentBook& other) const { return path == other.path; }
+  bool operator==(const RecentBook &other) const { return path == other.path; }
 };
 
 class RecentBooksStore;
 namespace JsonSettingsIO {
-bool loadRecentBooks(RecentBooksStore& store, const char* json);
-}  // namespace JsonSettingsIO
+bool loadRecentBooks(RecentBooksStore &store, const char *json);
+} // namespace JsonSettingsIO
 
 class RecentBooksStore {
   // Static instance
@@ -22,23 +23,26 @@ class RecentBooksStore {
 
   std::vector<RecentBook> recentBooks;
 
-  friend bool JsonSettingsIO::loadRecentBooks(RecentBooksStore&, const char*);
+  friend bool JsonSettingsIO::loadRecentBooks(RecentBooksStore &, const char *);
 
- public:
+public:
   ~RecentBooksStore() = default;
 
   // Get singleton instance
-  static RecentBooksStore& getInstance() { return instance; }
+  static RecentBooksStore &getInstance() { return instance; }
 
   // Add a book to the recent list (moves to front if already exists)
-  void addBook(const std::string& path, const std::string& title, const std::string& author,
-               const std::string& coverBmpPath);
+  void addBook(const std::string &path, const std::string &title,
+               const std::string &author, const std::string &coverBmpPath);
 
-  void updateBook(const std::string& path, const std::string& title, const std::string& author,
-                  const std::string& coverBmpPath);
+  void updateBook(const std::string &path, const std::string &title,
+                  const std::string &author, const std::string &coverBmpPath);
+
+  // Update reading progress for a book (0-100%)
+  void updateProgress(const std::string &path, uint8_t percent);
 
   // Get the list of recent books (most recent first)
-  const std::vector<RecentBook>& getBooks() const { return recentBooks; }
+  const std::vector<RecentBook> &getBooks() const { return recentBooks; }
 
   // Get the count of recent books
   int getCount() const { return static_cast<int>(recentBooks.size()); }
@@ -48,7 +52,7 @@ class RecentBooksStore {
   bool loadFromFile();
   RecentBook getDataFromBook(std::string path) const;
 
- private:
+private:
   bool loadFromBinaryFile();
 };
 

@@ -16,21 +16,27 @@ constexpr char RECENT_BOOKS_FILE_BIN[] = "/.crosspoint/recent.bin";
 constexpr char RECENT_BOOKS_FILE_JSON[] = "/.crosspoint/recent.json";
 constexpr char RECENT_BOOKS_FILE_BAK[] = "/.crosspoint/recent.bin.bak";
 constexpr int MAX_RECENT_BOOKS = 10;
-}  // namespace
+} // namespace
 
 RecentBooksStore RecentBooksStore::instance;
 
-void RecentBooksStore::addBook(const std::string& path, const std::string& title, const std::string& author,
-                               const std::string& coverBmpPath) {
-  // Remove existing entry if present
+void RecentBooksStore::addBook(const std::string &path,
+                               const std::string &title,
+                               const std::string &author,
+                               const std::string &coverBmpPath) {
+  // Remove existing entry if present, preserving progress
+  uint8_t existingProgress = 0;
   auto it =
-      std::find_if(recentBooks.begin(), recentBooks.end(), [&](const RecentBook& book) { return book.path == path; });
+      std::find_if(recentBooks.begin(), recentBooks.end(),
+                   [&](const RecentBook &book) { return book.path == path; });
   if (it != recentBooks.end()) {
+    existingProgress = it->progressPercent;
     recentBooks.erase(it);
   }
 
-  // Add to front
-  recentBooks.insert(recentBooks.begin(), {path, title, author, coverBmpPath});
+  // Add to front with preserved progress
+  RecentBook newBook{path, title, author, coverBmpPath, existingProgress};
+  recentBooks.insert(recentBooks.begin(), newBook);
 
   // Trim to max size
   if (recentBooks.size() > MAX_RECENT_BOOKS) {
@@ -40,15 +46,31 @@ void RecentBooksStore::addBook(const std::string& path, const std::string& title
   saveToFile();
 }
 
-void RecentBooksStore::updateBook(const std::string& path, const std::string& title, const std::string& author,
-                                  const std::string& coverBmpPath) {
+void RecentBooksStore::updateBook(const std::string &path,
+                                  const std::string &title,
+                                  const std::string &author,
+                                  const std::string &coverBmpPath) {
   auto it =
-      std::find_if(recentBooks.begin(), recentBooks.end(), [&](const RecentBook& book) { return book.path == path; });
+      std::find_if(recentBooks.begin(), recentBooks.end(),
+                   [&](const RecentBook &book) { return book.path == path; });
   if (it != recentBooks.end()) {
-    RecentBook& book = *it;
+    RecentBook &book = *it;
     book.title = title;
     book.author = author;
     book.coverBmpPath = coverBmpPath;
+    saveToFile();
+  }
+}
+
+void RecentBooksStore::updateProgress(const std::string &path,
+                                      uint8_t percent) {
+  if (percent > 100)
+    percent = 100;
+  auto it =
+      std::find_if(recentBooks.begin(), recentBooks.end(),
+                   [&](const RecentBook &book) { return book.path == path; });
+  if (it != recentBooks.end()) {
+    it->progressPercent = percent;
     saveToFile();
   }
 }
@@ -68,19 +90,23 @@ RecentBook RecentBooksStore::getDataFromBook(std::string path) const {
   LOG_DBG("RBS", "Loading recent book: %s", path.c_str());
 
   // If epub, try to load the metadata for title/author and cover.
-  // Use buildIfMissing=false to avoid heavy epub loading on boot; getTitle()/getAuthor() may be
-  // blank until the book is opened, and entries with missing title are omitted from recent list.
+  // Use buildIfMissing=false to avoid heavy epub loading on boot;
+  // getTitle()/getAuthor() may be blank until the book is opened, and entries
+  // with missing title are omitted from recent list.
   if (FsHelpers::hasEpubExtension(lastBookFileName)) {
     Epub epub(path, "/.crosspoint");
     epub.load(false, true);
-    return RecentBook{path, epub.getTitle(), epub.getAuthor(), epub.getThumbBmpPath()};
+    return RecentBook{path, epub.getTitle(), epub.getAuthor(),
+                      epub.getThumbBmpPath()};
   } else if (FsHelpers::hasXtcExtension(lastBookFileName)) {
     // Handle XTC file
     Xtc xtc(path, "/.crosspoint");
     if (xtc.load()) {
-      return RecentBook{path, xtc.getTitle(), xtc.getAuthor(), xtc.getThumbBmpPath()};
+      return RecentBook{path, xtc.getTitle(), xtc.getAuthor(),
+                        xtc.getThumbBmpPath()};
     }
-  } else if (FsHelpers::hasTxtExtension(lastBookFileName) || FsHelpers::hasMarkdownExtension(lastBookFileName)) {
+  } else if (FsHelpers::hasTxtExtension(lastBookFileName) ||
+             FsHelpers::hasMarkdownExtension(lastBookFileName)) {
     return RecentBook{path, lastBookFileName, "", ""};
   }
   return RecentBook{path, "", "", ""};
@@ -153,7 +179,8 @@ bool RecentBooksStore::loadFromBinaryFile() {
       serialization::readString(inputFile, author);
       serialization::readString(inputFile, coverBmpPath);
 
-      // Omit books with missing title (e.g. saved before metadata was available)
+      // Omit books with missing title (e.g. saved before metadata was
+      // available)
       if (title.empty()) {
         omitted++;
         continue;
@@ -175,6 +202,7 @@ bool RecentBooksStore::loadFromBinaryFile() {
   }
 
   inputFile.close();
-  LOG_DBG("RBS", "Recent books loaded from binary file (%d entries)", static_cast<int>(recentBooks.size()));
+  LOG_DBG("RBS", "Recent books loaded from binary file (%d entries)",
+          static_cast<int>(recentBooks.size()));
   return true;
 }

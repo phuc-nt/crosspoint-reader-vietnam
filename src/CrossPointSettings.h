@@ -237,7 +237,7 @@ public:
   // Long-press chapter skip on side buttons
   uint8_t longPressChapterSkip = 1;
   // UI Theme
-  uint8_t uiTheme = LYRA_3_COVERS;
+  uint8_t uiTheme = CLASSIC;
   // Sunlight fading compensation
   uint8_t fadingFix = 0;
   // Use book's embedded CSS styles for EPUB rendering (1 = enabled, 0 =
