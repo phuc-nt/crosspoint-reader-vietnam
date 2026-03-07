@@ -8,31 +8,31 @@
  */
 
 class I18n {
- public:
-  static I18n& getInstance();
+public:
+  static I18n &getInstance();
 
   // Disable copy
-  I18n(const I18n&) = delete;
-  I18n& operator=(const I18n&) = delete;
+  I18n(const I18n &) = delete;
+  I18n &operator=(const I18n &) = delete;
 
   // Get localized string by ID
-  const char* get(StrId id) const;
+  const char *get(StrId id) const;
 
-  const char* operator[](StrId id) const { return get(id); }
+  const char *operator[](StrId id) const { return get(id); }
 
   Language getLanguage() const { return _language; }
   void setLanguage(Language lang);
-  const char* getLanguageName(Language lang) const;
+  const char *getLanguageName(Language lang) const;
 
   void saveSettings();
   void loadSettings();
 
   // Get all unique characters used in a specific language
   // Returns a sorted string of unique characters
-  static const char* getCharacterSet(Language lang);
+  static const char *getCharacterSet(Language lang);
 
- private:
-  I18n() : _language(Language::EN) {}
+private:
+  I18n() : _language(Language::VI) {}
 
   Language _language;
 };

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <builtinFonts/notosans_8_regular.h>
+#include <builtinFonts/bevietnam_ui_8_regular.h>
 // Vietnamese fonts - Literata
 #include <builtinFonts/literata_12_bold.h>
 #include <builtinFonts/literata_12_bolditalic.h>
@@ -52,8 +52,8 @@
 #include <builtinFonts/vollkorn_18_bolditalic.h>
 #include <builtinFonts/vollkorn_18_italic.h>
 #include <builtinFonts/vollkorn_18_regular.h>
-// UI fonts
-#include <builtinFonts/ubuntu_10_bold.h>
-#include <builtinFonts/ubuntu_10_regular.h>
-#include <builtinFonts/ubuntu_12_bold.h>
-#include <builtinFonts/ubuntu_12_regular.h>
+// UI fonts (Be Vietnam Pro - supports Vietnamese)
+#include <builtinFonts/bevietnam_ui_10_bold.h>
+#include <builtinFonts/bevietnam_ui_10_regular.h>
+#include <builtinFonts/bevietnam_ui_12_bold.h>
+#include <builtinFonts/bevietnam_ui_12_regular.h>

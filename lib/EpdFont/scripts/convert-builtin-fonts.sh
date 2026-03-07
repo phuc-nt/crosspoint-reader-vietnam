@@ -43,20 +43,20 @@ for size in ${VOLLKORN_FONT_SIZES[@]}; do
   done
 done
 
-UI_FONT_SIZES=(10 12)
+# === UI Font (Be Vietnam Pro — supports Vietnamese) ===
+
+UI_FONT_SIZES=(8 10 12)
 UI_FONT_STYLES=("Regular" "Bold")
 
 for size in ${UI_FONT_SIZES[@]}; do
   for style in ${UI_FONT_STYLES[@]}; do
-    font_name="ubuntu_${size}_$(echo $style | tr '[:upper:]' '[:lower:]')"
-    font_path="../builtinFonts/source/Ubuntu/Ubuntu-${style}.ttf"
+    font_name="bevietnam_ui_${size}_$(echo $style | tr '[:upper:]' '[:lower:]')"
+    font_path="../builtinFonts/source/BeVietnamPro/BeVietnamPro-${style}.ttf"
     output_path="../builtinFonts/${font_name}.h"
     python fontconvert.py $font_name $size $font_path > $output_path
     echo "Generated $output_path"
   done
 done
-
-
 
 echo ""
 echo "Running compression verification..."
