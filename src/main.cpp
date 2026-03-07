@@ -33,83 +33,102 @@ GfxRenderer renderer(display);
 ActivityManager activityManager(renderer, mappedInputManager);
 FontDecompressor fontDecompressor;
 
-// Fonts
-EpdFont bookerly14RegularFont(&bookerly_14_regular);
-EpdFont bookerly14BoldFont(&bookerly_14_bold);
-EpdFont bookerly14ItalicFont(&bookerly_14_italic);
-EpdFont bookerly14BoldItalicFont(&bookerly_14_bolditalic);
-EpdFontFamily bookerly14FontFamily(&bookerly14RegularFont, &bookerly14BoldFont, &bookerly14ItalicFont,
-                                   &bookerly14BoldItalicFont);
+// Default font (loaded outside OMIT_FONTS guard)
+EpdFont literata14RegularFont(&literata_14_regular);
+EpdFont literata14BoldFont(&literata_14_bold);
+EpdFont literata14ItalicFont(&literata_14_italic);
+EpdFont literata14BoldItalicFont(&literata_14_bolditalic);
+EpdFontFamily literata14FontFamily(&literata14RegularFont, &literata14BoldFont,
+                                   &literata14ItalicFont,
+                                   &literata14BoldItalicFont);
 #ifndef OMIT_FONTS
-EpdFont bookerly12RegularFont(&bookerly_12_regular);
-EpdFont bookerly12BoldFont(&bookerly_12_bold);
-EpdFont bookerly12ItalicFont(&bookerly_12_italic);
-EpdFont bookerly12BoldItalicFont(&bookerly_12_bolditalic);
-EpdFontFamily bookerly12FontFamily(&bookerly12RegularFont, &bookerly12BoldFont, &bookerly12ItalicFont,
-                                   &bookerly12BoldItalicFont);
-EpdFont bookerly16RegularFont(&bookerly_16_regular);
-EpdFont bookerly16BoldFont(&bookerly_16_bold);
-EpdFont bookerly16ItalicFont(&bookerly_16_italic);
-EpdFont bookerly16BoldItalicFont(&bookerly_16_bolditalic);
-EpdFontFamily bookerly16FontFamily(&bookerly16RegularFont, &bookerly16BoldFont, &bookerly16ItalicFont,
-                                   &bookerly16BoldItalicFont);
-EpdFont bookerly18RegularFont(&bookerly_18_regular);
-EpdFont bookerly18BoldFont(&bookerly_18_bold);
-EpdFont bookerly18ItalicFont(&bookerly_18_italic);
-EpdFont bookerly18BoldItalicFont(&bookerly_18_bolditalic);
-EpdFontFamily bookerly18FontFamily(&bookerly18RegularFont, &bookerly18BoldFont, &bookerly18ItalicFont,
-                                   &bookerly18BoldItalicFont);
+// Vietnamese fonts - Literata (Serif, Google Play Books font)
+EpdFont literata12RegularFont(&literata_12_regular);
+EpdFont literata12BoldFont(&literata_12_bold);
+EpdFont literata12ItalicFont(&literata_12_italic);
+EpdFont literata12BoldItalicFont(&literata_12_bolditalic);
+EpdFontFamily literata12FontFamily(&literata12RegularFont, &literata12BoldFont,
+                                   &literata12ItalicFont,
+                                   &literata12BoldItalicFont);
+EpdFont literata16RegularFont(&literata_16_regular);
+EpdFont literata16BoldFont(&literata_16_bold);
+EpdFont literata16ItalicFont(&literata_16_italic);
+EpdFont literata16BoldItalicFont(&literata_16_bolditalic);
+EpdFontFamily literata16FontFamily(&literata16RegularFont, &literata16BoldFont,
+                                   &literata16ItalicFont,
+                                   &literata16BoldItalicFont);
+EpdFont literata18RegularFont(&literata_18_regular);
+EpdFont literata18BoldFont(&literata_18_bold);
+EpdFont literata18ItalicFont(&literata_18_italic);
+EpdFont literata18BoldItalicFont(&literata_18_bolditalic);
+EpdFontFamily literata18FontFamily(&literata18RegularFont, &literata18BoldFont,
+                                   &literata18ItalicFont,
+                                   &literata18BoldItalicFont);
 
-EpdFont notosans12RegularFont(&notosans_12_regular);
-EpdFont notosans12BoldFont(&notosans_12_bold);
-EpdFont notosans12ItalicFont(&notosans_12_italic);
-EpdFont notosans12BoldItalicFont(&notosans_12_bolditalic);
-EpdFontFamily notosans12FontFamily(&notosans12RegularFont, &notosans12BoldFont, &notosans12ItalicFont,
-                                   &notosans12BoldItalicFont);
-EpdFont notosans14RegularFont(&notosans_14_regular);
-EpdFont notosans14BoldFont(&notosans_14_bold);
-EpdFont notosans14ItalicFont(&notosans_14_italic);
-EpdFont notosans14BoldItalicFont(&notosans_14_bolditalic);
-EpdFontFamily notosans14FontFamily(&notosans14RegularFont, &notosans14BoldFont, &notosans14ItalicFont,
-                                   &notosans14BoldItalicFont);
-EpdFont notosans16RegularFont(&notosans_16_regular);
-EpdFont notosans16BoldFont(&notosans_16_bold);
-EpdFont notosans16ItalicFont(&notosans_16_italic);
-EpdFont notosans16BoldItalicFont(&notosans_16_bolditalic);
-EpdFontFamily notosans16FontFamily(&notosans16RegularFont, &notosans16BoldFont, &notosans16ItalicFont,
-                                   &notosans16BoldItalicFont);
-EpdFont notosans18RegularFont(&notosans_18_regular);
-EpdFont notosans18BoldFont(&notosans_18_bold);
-EpdFont notosans18ItalicFont(&notosans_18_italic);
-EpdFont notosans18BoldItalicFont(&notosans_18_bolditalic);
-EpdFontFamily notosans18FontFamily(&notosans18RegularFont, &notosans18BoldFont, &notosans18ItalicFont,
-                                   &notosans18BoldItalicFont);
+// Vietnamese fonts - Be Vietnam Pro (Sans-serif, designed for Vietnamese)
+EpdFont bevietnam12RegularFont(&bevietnam_12_regular);
+EpdFont bevietnam12BoldFont(&bevietnam_12_bold);
+EpdFont bevietnam12ItalicFont(&bevietnam_12_italic);
+EpdFont bevietnam12BoldItalicFont(&bevietnam_12_bolditalic);
+EpdFontFamily bevietnam12FontFamily(&bevietnam12RegularFont,
+                                    &bevietnam12BoldFont,
+                                    &bevietnam12ItalicFont,
+                                    &bevietnam12BoldItalicFont);
+EpdFont bevietnam14RegularFont(&bevietnam_14_regular);
+EpdFont bevietnam14BoldFont(&bevietnam_14_bold);
+EpdFont bevietnam14ItalicFont(&bevietnam_14_italic);
+EpdFont bevietnam14BoldItalicFont(&bevietnam_14_bolditalic);
+EpdFontFamily bevietnam14FontFamily(&bevietnam14RegularFont,
+                                    &bevietnam14BoldFont,
+                                    &bevietnam14ItalicFont,
+                                    &bevietnam14BoldItalicFont);
+EpdFont bevietnam16RegularFont(&bevietnam_16_regular);
+EpdFont bevietnam16BoldFont(&bevietnam_16_bold);
+EpdFont bevietnam16ItalicFont(&bevietnam_16_italic);
+EpdFont bevietnam16BoldItalicFont(&bevietnam_16_bolditalic);
+EpdFontFamily bevietnam16FontFamily(&bevietnam16RegularFont,
+                                    &bevietnam16BoldFont,
+                                    &bevietnam16ItalicFont,
+                                    &bevietnam16BoldItalicFont);
+EpdFont bevietnam18RegularFont(&bevietnam_18_regular);
+EpdFont bevietnam18BoldFont(&bevietnam_18_bold);
+EpdFont bevietnam18ItalicFont(&bevietnam_18_italic);
+EpdFont bevietnam18BoldItalicFont(&bevietnam_18_bolditalic);
+EpdFontFamily bevietnam18FontFamily(&bevietnam18RegularFont,
+                                    &bevietnam18BoldFont,
+                                    &bevietnam18ItalicFont,
+                                    &bevietnam18BoldItalicFont);
 
-EpdFont opendyslexic8RegularFont(&opendyslexic_8_regular);
-EpdFont opendyslexic8BoldFont(&opendyslexic_8_bold);
-EpdFont opendyslexic8ItalicFont(&opendyslexic_8_italic);
-EpdFont opendyslexic8BoldItalicFont(&opendyslexic_8_bolditalic);
-EpdFontFamily opendyslexic8FontFamily(&opendyslexic8RegularFont, &opendyslexic8BoldFont, &opendyslexic8ItalicFont,
-                                      &opendyslexic8BoldItalicFont);
-EpdFont opendyslexic10RegularFont(&opendyslexic_10_regular);
-EpdFont opendyslexic10BoldFont(&opendyslexic_10_bold);
-EpdFont opendyslexic10ItalicFont(&opendyslexic_10_italic);
-EpdFont opendyslexic10BoldItalicFont(&opendyslexic_10_bolditalic);
-EpdFontFamily opendyslexic10FontFamily(&opendyslexic10RegularFont, &opendyslexic10BoldFont, &opendyslexic10ItalicFont,
-                                       &opendyslexic10BoldItalicFont);
-EpdFont opendyslexic12RegularFont(&opendyslexic_12_regular);
-EpdFont opendyslexic12BoldFont(&opendyslexic_12_bold);
-EpdFont opendyslexic12ItalicFont(&opendyslexic_12_italic);
-EpdFont opendyslexic12BoldItalicFont(&opendyslexic_12_bolditalic);
-EpdFontFamily opendyslexic12FontFamily(&opendyslexic12RegularFont, &opendyslexic12BoldFont, &opendyslexic12ItalicFont,
-                                       &opendyslexic12BoldItalicFont);
-EpdFont opendyslexic14RegularFont(&opendyslexic_14_regular);
-EpdFont opendyslexic14BoldFont(&opendyslexic_14_bold);
-EpdFont opendyslexic14ItalicFont(&opendyslexic_14_italic);
-EpdFont opendyslexic14BoldItalicFont(&opendyslexic_14_bolditalic);
-EpdFontFamily opendyslexic14FontFamily(&opendyslexic14RegularFont, &opendyslexic14BoldFont, &opendyslexic14ItalicFont,
-                                       &opendyslexic14BoldItalicFont);
-#endif  // OMIT_FONTS
+// Vietnamese fonts - Vollkorn (Classic Serif)
+EpdFont vollkorn12RegularFont(&vollkorn_12_regular);
+EpdFont vollkorn12BoldFont(&vollkorn_12_bold);
+EpdFont vollkorn12ItalicFont(&vollkorn_12_italic);
+EpdFont vollkorn12BoldItalicFont(&vollkorn_12_bolditalic);
+EpdFontFamily vollkorn12FontFamily(&vollkorn12RegularFont, &vollkorn12BoldFont,
+                                   &vollkorn12ItalicFont,
+                                   &vollkorn12BoldItalicFont);
+EpdFont vollkorn14RegularFont(&vollkorn_14_regular);
+EpdFont vollkorn14BoldFont(&vollkorn_14_bold);
+EpdFont vollkorn14ItalicFont(&vollkorn_14_italic);
+EpdFont vollkorn14BoldItalicFont(&vollkorn_14_bolditalic);
+EpdFontFamily vollkorn14FontFamily(&vollkorn14RegularFont, &vollkorn14BoldFont,
+                                   &vollkorn14ItalicFont,
+                                   &vollkorn14BoldItalicFont);
+EpdFont vollkorn16RegularFont(&vollkorn_16_regular);
+EpdFont vollkorn16BoldFont(&vollkorn_16_bold);
+EpdFont vollkorn16ItalicFont(&vollkorn_16_italic);
+EpdFont vollkorn16BoldItalicFont(&vollkorn_16_bolditalic);
+EpdFontFamily vollkorn16FontFamily(&vollkorn16RegularFont, &vollkorn16BoldFont,
+                                   &vollkorn16ItalicFont,
+                                   &vollkorn16BoldItalicFont);
+EpdFont vollkorn18RegularFont(&vollkorn_18_regular);
+EpdFont vollkorn18BoldFont(&vollkorn_18_bold);
+EpdFont vollkorn18ItalicFont(&vollkorn_18_italic);
+EpdFont vollkorn18BoldItalicFont(&vollkorn_18_bolditalic);
+EpdFontFamily vollkorn18FontFamily(&vollkorn18RegularFont, &vollkorn18BoldFont,
+                                   &vollkorn18ItalicFont,
+                                   &vollkorn18BoldItalicFont);
+#endif // OMIT_FONTS
 
 EpdFont smallFont(&notosans_8_regular);
 EpdFontFamily smallFontFamily(&smallFont);
@@ -131,24 +150,31 @@ unsigned long t2 = 0;
 void verifyPowerButtonDuration() {
   if (SETTINGS.shortPwrBtn == CrossPointSettings::SHORT_PWRBTN::SLEEP) {
     // Fast path for short press
-    // Needed because inputManager.isPressed() may take up to ~500ms to return the correct state
+    // Needed because inputManager.isPressed() may take up to ~500ms to return
+    // the correct state
     return;
   }
 
-  // Give the user up to 1000ms to start holding the power button, and must hold for SETTINGS.getPowerButtonDuration()
+  // Give the user up to 1000ms to start holding the power button, and must hold
+  // for SETTINGS.getPowerButtonDuration()
   const auto start = millis();
   bool abort = false;
-  // Subtract the current time, because inputManager only starts counting the HeldTime from the first update()
-  // This way, we remove the time we already took to reach here from the duration,
-  // assuming the button was held until now from millis()==0 (i.e. device start time).
+  // Subtract the current time, because inputManager only starts counting the
+  // HeldTime from the first update() This way, we remove the time we already
+  // took to reach here from the duration, assuming the button was held until
+  // now from millis()==0 (i.e. device start time).
   const uint16_t calibration = start;
   const uint16_t calibratedPressDuration =
-      (calibration < SETTINGS.getPowerButtonDuration()) ? SETTINGS.getPowerButtonDuration() - calibration : 1;
+      (calibration < SETTINGS.getPowerButtonDuration())
+          ? SETTINGS.getPowerButtonDuration() - calibration
+          : 1;
 
   gpio.update();
-  // Needed because inputManager.isPressed() may take up to ~500ms to return the correct state
+  // Needed because inputManager.isPressed() may take up to ~500ms to return the
+  // correct state
   while (!gpio.isPressed(HalGPIO::BTN_POWER) && millis() - start < 1000) {
-    delay(10);  // only wait 10ms each iteration to not delay too much in case of short configured duration.
+    delay(10); // only wait 10ms each iteration to not delay too much in case of
+               // short configured duration.
     gpio.update();
   }
 
@@ -157,7 +183,8 @@ void verifyPowerButtonDuration() {
     do {
       delay(10);
       gpio.update();
-    } while (gpio.isPressed(HalGPIO::BTN_POWER) && gpio.getHeldTime() < calibratedPressDuration);
+    } while (gpio.isPressed(HalGPIO::BTN_POWER) &&
+             gpio.getHeldTime() < calibratedPressDuration);
     abort = gpio.getHeldTime() < calibratedPressDuration;
   } else {
     abort = true;
@@ -180,7 +207,8 @@ void waitForPowerRelease() {
 
 // Enter deep sleep mode
 void enterDeepSleep() {
-  HalPowerManager::Lock powerLock;  // Ensure we are at normal CPU frequency for sleep preparation
+  HalPowerManager::Lock
+      powerLock; // Ensure we are at normal CPU frequency for sleep preparation
   APP_STATE.lastSleepFromReader = activityManager.isReaderActivity();
   APP_STATE.saveToFile();
 
@@ -204,21 +232,21 @@ void setupDisplayAndFonts() {
     LOG_ERR("MAIN", "Font decompressor init failed");
   }
   renderer.setFontDecompressor(&fontDecompressor);
-  renderer.insertFont(BOOKERLY_14_FONT_ID, bookerly14FontFamily);
+  renderer.insertFont(LITERATA_14_FONT_ID, literata14FontFamily);
 #ifndef OMIT_FONTS
-  renderer.insertFont(BOOKERLY_12_FONT_ID, bookerly12FontFamily);
-  renderer.insertFont(BOOKERLY_16_FONT_ID, bookerly16FontFamily);
-  renderer.insertFont(BOOKERLY_18_FONT_ID, bookerly18FontFamily);
-
-  renderer.insertFont(NOTOSANS_12_FONT_ID, notosans12FontFamily);
-  renderer.insertFont(NOTOSANS_14_FONT_ID, notosans14FontFamily);
-  renderer.insertFont(NOTOSANS_16_FONT_ID, notosans16FontFamily);
-  renderer.insertFont(NOTOSANS_18_FONT_ID, notosans18FontFamily);
-  renderer.insertFont(OPENDYSLEXIC_8_FONT_ID, opendyslexic8FontFamily);
-  renderer.insertFont(OPENDYSLEXIC_10_FONT_ID, opendyslexic10FontFamily);
-  renderer.insertFont(OPENDYSLEXIC_12_FONT_ID, opendyslexic12FontFamily);
-  renderer.insertFont(OPENDYSLEXIC_14_FONT_ID, opendyslexic14FontFamily);
-#endif  // OMIT_FONTS
+  // Vietnamese fonts
+  renderer.insertFont(LITERATA_12_FONT_ID, literata12FontFamily);
+  renderer.insertFont(LITERATA_16_FONT_ID, literata16FontFamily);
+  renderer.insertFont(LITERATA_18_FONT_ID, literata18FontFamily);
+  renderer.insertFont(BEVIETNAM_12_FONT_ID, bevietnam12FontFamily);
+  renderer.insertFont(BEVIETNAM_14_FONT_ID, bevietnam14FontFamily);
+  renderer.insertFont(BEVIETNAM_16_FONT_ID, bevietnam16FontFamily);
+  renderer.insertFont(BEVIETNAM_18_FONT_ID, bevietnam18FontFamily);
+  renderer.insertFont(VOLLKORN_12_FONT_ID, vollkorn12FontFamily);
+  renderer.insertFont(VOLLKORN_14_FONT_ID, vollkorn14FontFamily);
+  renderer.insertFont(VOLLKORN_16_FONT_ID, vollkorn16FontFamily);
+  renderer.insertFont(VOLLKORN_18_FONT_ID, vollkorn18FontFamily);
+#endif // OMIT_FONTS
   renderer.insertFont(UI_10_FONT_ID, ui10FontFamily);
   renderer.insertFont(UI_12_FONT_ID, ui12FontFamily);
   renderer.insertFont(SMALL_FONT_ID, smallFontFamily);
@@ -252,7 +280,8 @@ void setup() {
   }
 
   HalSystem::checkPanic();
-  HalSystem::clearPanic();  // TODO: move this to an activity when we have one to display the panic info
+  HalSystem::clearPanic(); // TODO: move this to an activity when we have one to
+                           // display the panic info
 
   SETTINGS.loadFromFile();
   I18N.loadSettings();
@@ -261,24 +290,25 @@ void setup() {
   ButtonNavigator::setMappedInputManager(mappedInputManager);
 
   switch (gpio.getWakeupReason()) {
-    case HalGPIO::WakeupReason::PowerButton:
-      // For normal wakeups, verify power button press duration
-      LOG_DBG("MAIN", "Verifying power button press duration");
-      verifyPowerButtonDuration();
-      break;
-    case HalGPIO::WakeupReason::AfterUSBPower:
-      // If USB power caused a cold boot, go back to sleep
-      LOG_DBG("MAIN", "Wakeup reason: After USB Power");
-      powerManager.startDeepSleep(gpio);
-      break;
-    case HalGPIO::WakeupReason::AfterFlash:
-      // After flashing, just proceed to boot
-    case HalGPIO::WakeupReason::Other:
-    default:
-      break;
+  case HalGPIO::WakeupReason::PowerButton:
+    // For normal wakeups, verify power button press duration
+    LOG_DBG("MAIN", "Verifying power button press duration");
+    verifyPowerButtonDuration();
+    break;
+  case HalGPIO::WakeupReason::AfterUSBPower:
+    // If USB power caused a cold boot, go back to sleep
+    LOG_DBG("MAIN", "Wakeup reason: After USB Power");
+    powerManager.startDeepSleep(gpio);
+    break;
+  case HalGPIO::WakeupReason::AfterFlash:
+    // After flashing, just proceed to boot
+  case HalGPIO::WakeupReason::Other:
+  default:
+    break;
   }
 
-  // First serial output only here to avoid timing inconsistencies for power button press duration verification
+  // First serial output only here to avoid timing inconsistencies for power
+  // button press duration verification
   LOG_DBG("MAIN", "Starting CrossPoint version " CROSSPOINT_VERSION);
 
   setupDisplayAndFonts();
@@ -288,13 +318,16 @@ void setup() {
   APP_STATE.loadFromFile();
   RECENT_BOOKS.loadFromFile();
 
-  // Boot to home screen if no book is open, last sleep was not from reader, back button is held, or reader activity
-  // crashed (indicated by readerActivityLoadCount > 0)
+  // Boot to home screen if no book is open, last sleep was not from reader,
+  // back button is held, or reader activity crashed (indicated by
+  // readerActivityLoadCount > 0)
   if (APP_STATE.openEpubPath.empty() || !APP_STATE.lastSleepFromReader ||
-      mappedInputManager.isPressed(MappedInputManager::Button::Back) || APP_STATE.readerActivityLoadCount > 0) {
+      mappedInputManager.isPressed(MappedInputManager::Button::Back) ||
+      APP_STATE.readerActivityLoadCount > 0) {
     activityManager.goHome();
   } else {
-    // Clear app state to avoid getting into a boot loop if the epub doesn't load
+    // Clear app state to avoid getting into a boot loop if the epub doesn't
+    // load
     const auto path = APP_STATE.openEpubPath;
     APP_STATE.openEpubPath = "";
     APP_STATE.readerActivityLoadCount++;
@@ -316,8 +349,11 @@ void loop() {
   renderer.setFadingFix(SETTINGS.fadingFix);
 
   if (Serial && millis() - lastMemPrint >= 10000) {
-    LOG_INF("MEM", "Free: %d bytes, Total: %d bytes, Min Free: %d bytes, MaxAlloc: %d bytes", ESP.getFreeHeap(),
-            ESP.getHeapSize(), ESP.getMinFreeHeap(), ESP.getMaxAllocHeap());
+    LOG_INF("MEM",
+            "Free: %d bytes, Total: %d bytes, Min Free: %d bytes, MaxAlloc: %d "
+            "bytes",
+            ESP.getFreeHeap(), ESP.getHeapSize(), ESP.getMinFreeHeap(),
+            ESP.getMaxAllocHeap());
     lastMemPrint = millis();
   }
 
@@ -330,18 +366,21 @@ void loop() {
       cmd.trim();
       if (cmd == "SCREENSHOT") {
         logSerial.printf("SCREENSHOT_START:%d\n", HalDisplay::BUFFER_SIZE);
-        uint8_t* buf = display.getFrameBuffer();
+        uint8_t *buf = display.getFrameBuffer();
         logSerial.write(buf, HalDisplay::BUFFER_SIZE);
         logSerial.printf("SCREENSHOT_END\n");
       }
     }
   }
 
-  // Check for any user activity (button press or release) or active background work
+  // Check for any user activity (button press or release) or active background
+  // work
   static unsigned long lastActivityTime = millis();
-  if (gpio.wasAnyPressed() || gpio.wasAnyReleased() || activityManager.preventAutoSleep()) {
-    lastActivityTime = millis();         // Reset inactivity timer
-    powerManager.setPowerSaving(false);  // Restore normal CPU frequency on user activity
+  if (gpio.wasAnyPressed() || gpio.wasAnyReleased() ||
+      activityManager.preventAutoSleep()) {
+    lastActivityTime = millis(); // Reset inactivity timer
+    powerManager.setPowerSaving(
+        false); // Restore normal CPU frequency on user activity
   }
 
   static bool screenshotButtonsReleased = true;
@@ -360,13 +399,15 @@ void loop() {
 
   const unsigned long sleepTimeoutMs = SETTINGS.getSleepTimeoutMs();
   if (millis() - lastActivityTime >= sleepTimeoutMs) {
-    LOG_DBG("SLP", "Auto-sleep triggered after %lu ms of inactivity", sleepTimeoutMs);
+    LOG_DBG("SLP", "Auto-sleep triggered after %lu ms of inactivity",
+            sleepTimeoutMs);
     enterDeepSleep();
     // This should never be hit as `enterDeepSleep` calls esp_deep_sleep_start
     return;
   }
 
-  if (gpio.isPressed(HalGPIO::BTN_POWER) && gpio.getHeldTime() > SETTINGS.getPowerButtonDuration()) {
+  if (gpio.isPressed(HalGPIO::BTN_POWER) &&
+      gpio.getHeldTime() > SETTINGS.getPowerButtonDuration()) {
     // If the screenshot combination is potentially being pressed, don't sleep
     if (gpio.isPressed(HalGPIO::BTN_DOWN)) {
       return;
@@ -384,20 +425,23 @@ void loop() {
   if (loopDuration > maxLoopDuration) {
     maxLoopDuration = loopDuration;
     if (maxLoopDuration > 50) {
-      LOG_DBG("LOOP", "New max loop duration: %lu ms (activity: %lu ms)", maxLoopDuration, activityDuration);
+      LOG_DBG("LOOP", "New max loop duration: %lu ms (activity: %lu ms)",
+              maxLoopDuration, activityDuration);
     }
   }
 
   // Add delay at the end of the loop to prevent tight spinning
-  // When an activity requests skip loop delay (e.g., webserver running), use yield() for faster response
-  // Otherwise, use longer delay to save power
+  // When an activity requests skip loop delay (e.g., webserver running), use
+  // yield() for faster response Otherwise, use longer delay to save power
   if (activityManager.skipLoopDelay()) {
-    powerManager.setPowerSaving(false);  // Make sure we're at full performance when skipLoopDelay is requested
-    yield();                             // Give FreeRTOS a chance to run tasks, but return immediately
+    powerManager.setPowerSaving(false); // Make sure we're at full performance
+                                        // when skipLoopDelay is requested
+    yield(); // Give FreeRTOS a chance to run tasks, but return immediately
   } else {
     if (millis() - lastActivityTime >= HalPowerManager::IDLE_POWER_SAVING_MS) {
       // If we've been inactive for a while, increase the delay to save power
-      powerManager.setPowerSaving(true);  // Lower CPU frequency after extended inactivity
+      powerManager.setPowerSaving(
+          true); // Lower CPU frequency after extended inactivity
       delay(50);
     } else {
       // Short delay to prevent tight loop while still being responsive
