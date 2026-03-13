@@ -284,16 +284,6 @@ float CrossPointSettings::getReaderLineCompression() const {
     case WIDE:
       return 1.0f;
     }
-  case VOLLKORN:
-    switch (lineSpacing) {
-    case TIGHT:
-      return 0.95f;
-    case NORMAL:
-    default:
-      return 1.0f;
-    case WIDE:
-      return 1.1f;
-    }
   }
 }
 
@@ -355,18 +345,6 @@ int CrossPointSettings::getReaderFontId() const {
       return BEVIETNAM_16_FONT_ID;
     case EXTRA_LARGE:
       return BEVIETNAM_18_FONT_ID;
-    }
-  case VOLLKORN:
-    switch (fontSize) {
-    case SMALL:
-      return VOLLKORN_12_FONT_ID;
-    case MEDIUM:
-    default:
-      return VOLLKORN_14_FONT_ID;
-    case LARGE:
-      return VOLLKORN_16_FONT_ID;
-    case EXTRA_LARGE:
-      return VOLLKORN_18_FONT_ID;
     }
   }
 }

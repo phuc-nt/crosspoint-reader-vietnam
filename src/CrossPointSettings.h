@@ -109,7 +109,6 @@ public:
   enum FONT_FAMILY {
     LITERATA = 0,
     BEVIETNAM = 1,
-    VOLLKORN = 2,
     FONT_FAMILY_COUNT
   };
   // Font size options
@@ -216,7 +215,7 @@ public:
   uint8_t frontButtonLeft = FRONT_HW_LEFT;
   uint8_t frontButtonRight = FRONT_HW_RIGHT;
   // Reader font settings
-  uint8_t fontFamily = LITERATA;
+  uint8_t fontFamily = BEVIETNAM;
   uint8_t fontSize = MEDIUM;
   uint8_t lineSpacing = NORMAL;
   uint8_t paragraphAlignment = JUSTIFIED;

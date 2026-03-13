@@ -99,35 +99,6 @@ EpdFontFamily bevietnam18FontFamily(&bevietnam18RegularFont,
                                     &bevietnam18ItalicFont,
                                     &bevietnam18BoldItalicFont);
 
-// Vietnamese fonts - Vollkorn (Classic Serif)
-EpdFont vollkorn12RegularFont(&vollkorn_12_regular);
-EpdFont vollkorn12BoldFont(&vollkorn_12_bold);
-EpdFont vollkorn12ItalicFont(&vollkorn_12_italic);
-EpdFont vollkorn12BoldItalicFont(&vollkorn_12_bolditalic);
-EpdFontFamily vollkorn12FontFamily(&vollkorn12RegularFont, &vollkorn12BoldFont,
-                                   &vollkorn12ItalicFont,
-                                   &vollkorn12BoldItalicFont);
-EpdFont vollkorn14RegularFont(&vollkorn_14_regular);
-EpdFont vollkorn14BoldFont(&vollkorn_14_bold);
-EpdFont vollkorn14ItalicFont(&vollkorn_14_italic);
-EpdFont vollkorn14BoldItalicFont(&vollkorn_14_bolditalic);
-EpdFontFamily vollkorn14FontFamily(&vollkorn14RegularFont, &vollkorn14BoldFont,
-                                   &vollkorn14ItalicFont,
-                                   &vollkorn14BoldItalicFont);
-EpdFont vollkorn16RegularFont(&vollkorn_16_regular);
-EpdFont vollkorn16BoldFont(&vollkorn_16_bold);
-EpdFont vollkorn16ItalicFont(&vollkorn_16_italic);
-EpdFont vollkorn16BoldItalicFont(&vollkorn_16_bolditalic);
-EpdFontFamily vollkorn16FontFamily(&vollkorn16RegularFont, &vollkorn16BoldFont,
-                                   &vollkorn16ItalicFont,
-                                   &vollkorn16BoldItalicFont);
-EpdFont vollkorn18RegularFont(&vollkorn_18_regular);
-EpdFont vollkorn18BoldFont(&vollkorn_18_bold);
-EpdFont vollkorn18ItalicFont(&vollkorn_18_italic);
-EpdFont vollkorn18BoldItalicFont(&vollkorn_18_bolditalic);
-EpdFontFamily vollkorn18FontFamily(&vollkorn18RegularFont, &vollkorn18BoldFont,
-                                   &vollkorn18ItalicFont,
-                                   &vollkorn18BoldItalicFont);
 #endif // OMIT_FONTS
 
 EpdFont smallFont(&bevietnam_ui_8_regular);
@@ -242,10 +213,7 @@ void setupDisplayAndFonts() {
   renderer.insertFont(BEVIETNAM_14_FONT_ID, bevietnam14FontFamily);
   renderer.insertFont(BEVIETNAM_16_FONT_ID, bevietnam16FontFamily);
   renderer.insertFont(BEVIETNAM_18_FONT_ID, bevietnam18FontFamily);
-  renderer.insertFont(VOLLKORN_12_FONT_ID, vollkorn12FontFamily);
-  renderer.insertFont(VOLLKORN_14_FONT_ID, vollkorn14FontFamily);
-  renderer.insertFont(VOLLKORN_16_FONT_ID, vollkorn16FontFamily);
-  renderer.insertFont(VOLLKORN_18_FONT_ID, vollkorn18FontFamily);
+
 #endif // OMIT_FONTS
   renderer.insertFont(UI_10_FONT_ID, ui10FontFamily);
   renderer.insertFont(UI_12_FONT_ID, ui12FontFamily);
