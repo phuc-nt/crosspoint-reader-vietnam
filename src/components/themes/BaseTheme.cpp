@@ -558,6 +558,26 @@ void BaseTheme::drawRecentBookCover(GfxRenderer& renderer, Rect rect, const std:
     } else {
       renderer.drawCenteredText(UI_10_FONT_ID, continueY, tr(STR_CONTINUE_READING), !bookSelected);
     }
+
+    // Progress bar below book card
+    const uint8_t progress = recentBooks[0].progressPercent;
+    if (progress > 0) {
+      constexpr int barHeight = 6;
+      const int barWidth = bookWidth - 20;
+      const int barX = bookX + 10;
+      const int barY = bookY + bookHeight + 8;
+
+      // Draw outline
+      renderer.drawRect(barX, barY, barWidth, barHeight);
+      // Draw filled portion
+      const int fillWidth = (barWidth - 2) * progress / 100;
+      if (fillWidth > 0) {
+        renderer.fillRect(barX + 1, barY + 1, fillWidth, barHeight - 2);
+      }
+      // Draw percentage text to the right of bar
+      const std::string percentText = std::to_string(progress) + "%";
+      renderer.drawText(SMALL_FONT_ID, barX + barWidth + 5, barY - 2, percentText.c_str());
+    }
   } else {
     // No book to continue reading
     const int y =

@@ -112,6 +112,17 @@ void EpubReaderActivity::onEnter() {
 void EpubReaderActivity::onExit() {
   Activity::onExit();
 
+  // Save reading progress to RecentBooksStore for home screen display
+  if (epub && section && section->pageCount > 0) {
+    const float chapterProgress =
+        static_cast<float>(section->currentPage) / static_cast<float>(section->pageCount);
+    const float bookProgress =
+        epub->calculateProgress(currentSpineIndex, chapterProgress) * 100.0f;
+    const uint8_t percent = static_cast<uint8_t>(
+        std::min(100.0f, std::max(0.0f, bookProgress + 0.5f)));
+    RECENT_BOOKS.updateProgress(epub->getPath(), percent);
+  }
+
   // Reset orientation back to portrait for the rest of the UI
   renderer.setOrientation(GfxRenderer::Orientation::Portrait);
 
