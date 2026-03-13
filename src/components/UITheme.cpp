@@ -19,8 +19,11 @@ constexpr int SKIP_PAGE_MS = 700;
 UITheme UITheme::instance;
 
 UITheme::UITheme() {
-  auto themeType = static_cast<CrossPointSettings::UI_THEME>(SETTINGS.uiTheme);
-  setTheme(themeType);
+  // Intentionally empty: do NOT allocate heap here.
+  // This constructor runs during C++ global static initialization (before
+  // setup()), where the heap may not be ready — especially after deep sleep
+  // wakeup. Initialization is deferred to reload(), which is called explicitly
+  // in setup() after all system resources are ready.
 }
 
 void UITheme::reload() {
