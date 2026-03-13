@@ -48,7 +48,7 @@ inline const std::vector<SettingInfo> &getSettingsList() {
       // --- Reader ---
       SettingInfo::Enum(
           StrId::STR_FONT_FAMILY, &CrossPointSettings::fontFamily,
-          {StrId::STR_LITERATA, StrId::STR_BE_VIETNAM_PRO, StrId::STR_VOLLKORN},
+          {StrId::STR_LITERATA, StrId::STR_BE_VIETNAM_PRO},
           "fontFamily", StrId::STR_CAT_READER),
       SettingInfo::Enum(StrId::STR_FONT_SIZE, &CrossPointSettings::fontSize,
                         {StrId::STR_SMALL, StrId::STR_MEDIUM, StrId::STR_LARGE,
