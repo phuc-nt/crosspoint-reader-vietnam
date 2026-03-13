@@ -235,11 +235,13 @@ void HomeActivity::render(RenderLock&&) {
     menuIcons.insert(menuIcons.begin() + 2, Library);
   }
 
+  constexpr int progressBarSpace = 30;  // Extra space for progress bar between cover and menu
   GUI.drawButtonMenu(
       renderer,
-      Rect{0, metrics.homeTopPadding + metrics.homeCoverTileHeight + metrics.verticalSpacing, pageWidth,
+      Rect{0, metrics.homeTopPadding + metrics.homeCoverTileHeight + metrics.verticalSpacing + progressBarSpace,
+           pageWidth,
            pageHeight - (metrics.headerHeight + metrics.homeTopPadding + metrics.verticalSpacing * 2 +
-                         metrics.buttonHintsHeight)},
+                         metrics.buttonHintsHeight + progressBarSpace)},
       static_cast<int>(menuItems.size()), selectorIndex - recentBooks.size(),
       [&menuItems](int index) { return std::string(menuItems[index]); },
       [&menuIcons](int index) { return menuIcons[index]; });

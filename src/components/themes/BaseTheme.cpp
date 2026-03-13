@@ -565,7 +565,7 @@ void BaseTheme::drawRecentBookCover(GfxRenderer& renderer, Rect rect, const std:
       constexpr int barHeight = 6;
       const int barWidth = bookWidth - 20;
       const int barX = bookX + 10;
-      const int barY = bookY + bookHeight + 8;
+      const int barY = bookY + bookHeight + 18;
 
       // Draw outline
       renderer.drawRect(barX, barY, barWidth, barHeight);

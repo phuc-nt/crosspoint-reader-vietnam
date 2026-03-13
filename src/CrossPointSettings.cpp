@@ -91,6 +91,13 @@ bool CrossPointSettings::loadFromFile() {
     if (!json.isEmpty()) {
       bool resave = false;
       bool result = JsonSettingsIO::loadSettings(*this, json.c_str(), &resave);
+
+      // Force-override: hide reader progress bar (progress shown on home screen instead)
+      if (statusBarProgressBar != HIDE_PROGRESS) {
+        statusBarProgressBar = HIDE_PROGRESS;
+        resave = true;
+      }
+
       if (result && resave) {
         if (saveToFile()) {
           LOG_DBG("CPS", "Resaved settings to update format");
