@@ -18,6 +18,7 @@
 #include "MappedInputManager.h"
 #include "QrDisplayActivity.h"
 #include "RecentBooksStore.h"
+#include "ReadingStats.h"
 #include "components/UITheme.h"
 #include "fontIds.h"
 #include "util/ScreenshotUtil.h"
@@ -103,7 +104,13 @@ void EpubReaderActivity::onEnter() {
   // Save current epub as last opened epub and add to recent books
   APP_STATE.openEpubPath = epub->getPath();
   APP_STATE.saveToFile();
+
+  // Load bookmarks for this book
+  bookmarkStore.loadForBook(epub->getPath());
   RECENT_BOOKS.addBook(epub->getPath(), epub->getTitle(), epub->getAuthor(), epub->getThumbBmpPath());
+
+  // Start reading stats session
+  READING_STATS.startSession();
 
   // Trigger first update
   requestUpdate();
@@ -125,6 +132,10 @@ void EpubReaderActivity::onExit() {
 
   // Reset orientation back to portrait for the rest of the UI
   renderer.setOrientation(GfxRenderer::Orientation::Portrait);
+
+  // End reading stats session and save
+  READING_STATS.endSession();
+  READING_STATS.save();
 
   APP_STATE.readerActivityLoadCount = 0;
   APP_STATE.saveToFile();
@@ -339,6 +350,46 @@ void EpubReaderActivity::onReaderMenuConfirm(EpubReaderMenuActivity::MenuAction 
           });
       break;
     }
+    case EpubReaderMenuActivity::MenuAction::ADD_BOOKMARK: {
+      if (epub && section) {
+        const int page = section->currentPage;
+        const float chapterProgress = section->pageCount > 0
+            ? static_cast<float>(page) / static_cast<float>(section->pageCount)
+            : 0.0f;
+        const float bookProgress = epub->calculateProgress(currentSpineIndex, chapterProgress);
+        const auto spineEntry = epub->getSpineItem(currentSpineIndex);
+        const std::string chapterTitle = spineEntry.href;  // Use href as identifier
+
+        if (bookmarkStore.hasBookmarkAt(currentSpineIndex, page)) {
+          GUI.drawPopup(renderer, tr(STR_BOOKMARK_EXISTS));
+        } else {
+          bookmarkStore.addBookmark(currentSpineIndex, page, bookProgress, chapterTitle);
+          bookmarkStore.save();
+          GUI.drawPopup(renderer, tr(STR_BOOKMARK_ADDED));
+        }
+        delay(800);
+      }
+      requestUpdate();
+      break;
+    }
+    case EpubReaderMenuActivity::MenuAction::BOOKMARKS: {
+      // TODO: Full bookmark list activity. For now, jump to first bookmark or show message.
+      if (bookmarkStore.count() == 0) {
+        GUI.drawPopup(renderer, tr(STR_NO_BOOKMARKS));
+        delay(800);
+        requestUpdate();
+      } else {
+        // Navigate to first bookmark as placeholder
+        const auto& bm = bookmarkStore.getBookmarks()[0];
+        if (currentSpineIndex != bm.spineIndex || (section && section->currentPage != bm.pageInChapter)) {
+          RenderLock lock(*this);
+          currentSpineIndex = bm.spineIndex;
+          nextPageNumber = bm.pageInChapter;
+          section.reset();
+        }
+      }
+      break;
+    }
     case EpubReaderMenuActivity::MenuAction::FOOTNOTES: {
       startActivityForResult(std::make_unique<EpubReaderFootnotesActivity>(renderer, mappedInput, currentPageFootnotes),
                              [this](const ActivityResult& result) {
@@ -499,6 +550,7 @@ void EpubReaderActivity::toggleAutoPageTurn(const uint8_t selectedPageTurnOption
 }
 
 void EpubReaderActivity::pageTurn(bool isForwardTurn) {
+  READING_STATS.incrementPagesTurned();
   if (isForwardTurn) {
     if (section->currentPage < section->pageCount - 1) {
       section->currentPage++;

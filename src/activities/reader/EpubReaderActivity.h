@@ -5,6 +5,7 @@
 
 #include "EpubReaderMenuActivity.h"
 #include "activities/Activity.h"
+#include "BookmarkStore.h"
 
 class EpubReaderActivity final : public Activity {
   std::shared_ptr<Epub> epub;
@@ -37,6 +38,9 @@ class EpubReaderActivity final : public Activity {
   static constexpr int MAX_FOOTNOTE_DEPTH = 3;
   SavedPosition savedPositions[MAX_FOOTNOTE_DEPTH] = {};
   int footnoteDepth = 0;
+
+  // Bookmark support
+  BookmarkStore bookmarkStore;
 
   void renderContents(std::unique_ptr<Page> page, int orientedMarginTop, int orientedMarginRight,
                       int orientedMarginBottom, int orientedMarginLeft);
