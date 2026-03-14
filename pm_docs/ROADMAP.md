@@ -13,8 +13,8 @@
 | 02 | Home Screen Progress & UI | ✅ Done | 08/03/2026 |
 | 03 | Quick Wins + Loading Indicator | ✅ Done | 14/03/2026 |
 | 04 | Core Features (Bookmarks, Stats, Metadata) | ✅ Done | 14/03/2026 |
-| 05 | Polish + Remaining | ⬜ Backlog | — |
-| 06 | Network + Release | ⬜ Backlog | — |
+| 05 | Polish (Sort, BookInfo, Home perf) | ✅ Done | 15/03/2026 |
+| 06 | Remaining + Release | ⬜ Backlog | — |
 
 ---
 

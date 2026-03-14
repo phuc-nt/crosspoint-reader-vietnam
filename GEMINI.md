@@ -57,7 +57,7 @@ Your primary mission is maintaining the Vietnamese fork of CrossPoint Reader.
 ├── src/
 │   ├── activities/       # UI screens (Activity lifecycle pattern)
 │   │   ├── reader/       # Reader activities + BookmarkListActivity
-│   │   └── home/         # Home, FileBrowser, Settings activities
+│   │   └── home/         # Home, FileBrowser, BookInfo, Settings activities
 │   ├── BookmarkStore.*   # Per-book bookmark persistence (JSON on SD)
 │   ├── ReadingStats.*    # Reading time/pages tracking (singleton)
 │   ├── FileBrowserMetaCache.* # Epub title/author cache for file browser
