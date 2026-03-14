@@ -36,16 +36,11 @@ void HomeActivity::loadRecentBooks(int maxBooks) {
   recentBooks.reserve(std::min(static_cast<int>(books.size()), maxBooks));
 
   for (const RecentBook& book : books) {
-    // Limit to maximum number of recent books
     if (recentBooks.size() >= maxBooks) {
       break;
     }
-
-    // Skip if file no longer exists
-    if (!Storage.exists(book.path.c_str())) {
-      continue;
-    }
-
+    // Skip Storage.exists() check here — it's slow I/O per book.
+    // Missing files will be handled when user tries to open them.
     recentBooks.push_back(book);
   }
 }

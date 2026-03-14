@@ -12,6 +12,7 @@
 #include "MappedInputManager.h"
 #include "components/UITheme.h"
 #include "FileBrowserMetaCache.h"
+#include "BookInfoActivity.h"
 #include "fontIds.h"
 
 namespace {
@@ -177,11 +178,18 @@ void FileBrowserActivity::loop() {
     bool isDirectory = entry.isDir;
 
     if (mappedInput.getHeldTime() >= GO_HOME_MS && !isDirectory) {
-      // --- LONG PRESS ACTION: DELETE FILE ---
       std::string cleanBasePath = basepath;
       if (cleanBasePath.back() != '/') cleanBasePath += "/";
       const std::string fullPath = cleanBasePath + entry.name;
 
+      // For epub files: show Book Info
+      if (FsHelpers::hasEpubExtension(entry.name)) {
+        startActivityForResult(std::make_unique<BookInfoActivity>(renderer, mappedInput, fullPath),
+                               [](const ActivityResult&) {});
+        return;
+      }
+
+      // --- NON-EPUB: LONG PRESS ACTION → DELETE FILE ---
       auto handler = [this, fullPath](const ActivityResult& res) {
         if (!res.isCancelled) {
           LOG_DBG("FileBrowser", "Attempting to delete: %s", fullPath.c_str());
