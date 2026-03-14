@@ -9,6 +9,7 @@
 #include <string>
 
 #include "I18n.h"
+#include "ReadingStats.h"
 #include "RecentBooksStore.h"
 #include "components/UITheme.h"
 #include "fontIds.h"
@@ -560,11 +561,30 @@ void BaseTheme::drawRecentBookCover(GfxRenderer& renderer, Rect rect, const std:
       renderer.drawText(SMALL_FONT_ID, barX + barWidth + 5, barY - 2, percentText.c_str());
     }
   } else {
-    // No book to continue reading
-    const int y =
-        bookY + (bookHeight - renderer.getLineHeight(UI_12_FONT_ID) - renderer.getLineHeight(UI_10_FONT_ID)) / 2;
-    renderer.drawCenteredText(UI_12_FONT_ID, y, tr(STR_NO_OPEN_BOOK));
-    renderer.drawCenteredText(UI_10_FONT_ID, y + renderer.getLineHeight(UI_12_FONT_ID), tr(STR_START_READING));
+    // No book to continue reading — show reading stats if available
+    const int lineH12 = renderer.getLineHeight(UI_12_FONT_ID);
+    const int lineH10 = renderer.getLineHeight(UI_10_FONT_ID);
+
+    if (READING_STATS.getTotalPagesTurned() > 0) {
+      // Show stats: reading time + pages read
+      const int totalLines = 3;  // "Chưa mở sách" + time + pages
+      const int blockHeight = lineH12 + lineH10 * 2 + 8;
+      const int y = bookY + (bookHeight - blockHeight) / 2;
+
+      renderer.drawCenteredText(UI_12_FONT_ID, y, tr(STR_NO_OPEN_BOOK));
+
+      const std::string timeLine = std::string(tr(STR_READING_TIME)) + READING_STATS.getFormattedReadingTime();
+      renderer.drawCenteredText(UI_10_FONT_ID, y + lineH12 + 4, timeLine.c_str());
+
+      const std::string pagesLine = std::string(tr(STR_PAGES_READ)) + std::to_string(READING_STATS.getTotalPagesTurned());
+      renderer.drawCenteredText(UI_10_FONT_ID, y + lineH12 + lineH10 + 6, pagesLine.c_str());
+    } else {
+      // No stats yet — show default message
+      const int y =
+          bookY + (bookHeight - lineH12 - lineH10) / 2;
+      renderer.drawCenteredText(UI_12_FONT_ID, y, tr(STR_NO_OPEN_BOOK));
+      renderer.drawCenteredText(UI_10_FONT_ID, y + lineH12, tr(STR_START_READING));
+    }
   }
 }
 

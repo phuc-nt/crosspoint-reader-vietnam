@@ -11,6 +11,7 @@
 #include "CrossPointSettings.h"
 #include "CrossPointState.h"
 #include "EpubReaderChapterSelectionActivity.h"
+#include "BookmarkListActivity.h"
 #include "EpubReaderFootnotesActivity.h"
 #include "EpubReaderPercentSelectionActivity.h"
 #include "KOReaderCredentialStore.h"
@@ -19,6 +20,7 @@
 #include "QrDisplayActivity.h"
 #include "RecentBooksStore.h"
 #include "ReadingStats.h"
+#include "FileBrowserMetaCache.h"
 #include "components/UITheme.h"
 #include "fontIds.h"
 #include "util/ScreenshotUtil.h"
@@ -108,6 +110,12 @@ void EpubReaderActivity::onEnter() {
   // Load bookmarks for this book
   bookmarkStore.loadForBook(epub->getPath());
   RECENT_BOOKS.addBook(epub->getPath(), epub->getTitle(), epub->getAuthor(), epub->getThumbBmpPath());
+
+  // Cache metadata for file browser display
+  if (!BROWSER_META.has(epub->getPath())) {
+    BROWSER_META.set(epub->getPath(), epub->getTitle(), epub->getAuthor());
+    BROWSER_META.save();
+  }
 
   // Start reading stats session
   READING_STATS.startSession();
@@ -373,21 +381,22 @@ void EpubReaderActivity::onReaderMenuConfirm(EpubReaderMenuActivity::MenuAction 
       break;
     }
     case EpubReaderMenuActivity::MenuAction::BOOKMARKS: {
-      // TODO: Full bookmark list activity. For now, jump to first bookmark or show message.
-      if (bookmarkStore.count() == 0) {
-        GUI.drawPopup(renderer, tr(STR_NO_BOOKMARKS));
-        delay(800);
-        requestUpdate();
-      } else {
-        // Navigate to first bookmark as placeholder
-        const auto& bm = bookmarkStore.getBookmarks()[0];
-        if (currentSpineIndex != bm.spineIndex || (section && section->currentPage != bm.pageInChapter)) {
-          RenderLock lock(*this);
-          currentSpineIndex = bm.spineIndex;
-          nextPageNumber = bm.pageInChapter;
-          section.reset();
-        }
-      }
+      startActivityForResult(
+          std::make_unique<BookmarkListActivity>(renderer, mappedInput, bookmarkStore),
+          [this](const ActivityResult& result) {
+            if (!result.isCancelled) {
+              const auto& menuResult = std::get<MenuResult>(result.data);
+              const int bmSpine = menuResult.orientation;  // reused field: spine index
+              const int bmPage = menuResult.pageTurnOption; // reused field: page number
+              if (currentSpineIndex != bmSpine || (section && section->currentPage != bmPage)) {
+                RenderLock lock(*this);
+                currentSpineIndex = bmSpine;
+                nextPageNumber = bmPage;
+                section.reset();
+              }
+            }
+            requestUpdate();
+          });
       break;
     }
     case EpubReaderMenuActivity::MenuAction::FOOTNOTES: {

@@ -11,6 +11,7 @@
 #include "../util/ConfirmationActivity.h"
 #include "MappedInputManager.h"
 #include "components/UITheme.h"
+#include "FileBrowserMetaCache.h"
 #include "fontIds.h"
 
 namespace {
@@ -107,6 +108,7 @@ void FileBrowserActivity::loadFiles() {
 void FileBrowserActivity::onEnter() {
   Activity::onEnter();
 
+  BROWSER_META.load();
   loadFiles();
   selectorIndex = 0;
 
@@ -244,6 +246,31 @@ std::string getFileName(std::string filename) {
   return filename.substr(0, pos);
 }
 
+std::string getDisplayName(const std::string& basepath, const std::string& filename) {
+  // For directories, just show folder name
+  if (filename.back() == '/') {
+    return filename.substr(0, filename.length() - 1);
+  }
+
+  // For epub files, try metadata cache
+  if (FsHelpers::hasEpubExtension(filename)) {
+    std::string cleanBase = basepath;
+    if (cleanBase.back() != '/') cleanBase += "/";
+    const std::string fullPath = cleanBase + filename;
+    const auto* meta = BROWSER_META.get(fullPath);
+    if (meta && !meta->title.empty()) {
+      if (!meta->author.empty()) {
+        return meta->title + " - " + meta->author;
+      }
+      return meta->title;
+    }
+  }
+
+  // Fallback: filename without extension
+  const auto pos = filename.rfind('.');
+  return filename.substr(0, pos);
+}
+
 void FileBrowserActivity::render(RenderLock&&) {
   renderer.clearScreen();
 
@@ -261,7 +288,7 @@ void FileBrowserActivity::render(RenderLock&&) {
   } else {
     GUI.drawList(
         renderer, Rect{0, contentTop, pageWidth, contentHeight}, files.size(), selectorIndex,
-        [this](int index) { return getFileName(files[index]); }, nullptr,
+        [this](int index) { return getDisplayName(basepath, files[index]); }, nullptr,
         [this](int index) { return UITheme::getFileIcon(files[index]); });
   }
 

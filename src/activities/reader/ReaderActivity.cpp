@@ -1,7 +1,11 @@
 #include "ReaderActivity.h"
 
 #include <FsHelpers.h>
+#include <GfxRenderer.h>
 #include <HalStorage.h>
+#include <I18n.h>
+
+#include "components/UITheme.h"
 
 #include "CrossPointSettings.h"
 #include "Epub.h"
@@ -115,6 +119,8 @@ void ReaderActivity::onEnter() {
   if (isBmpFile(initialBookPath)) {
     onGoToBmpViewer(initialBookPath);
   } else if (isXtcFile(initialBookPath)) {
+    GUI.drawPopup(renderer, tr(STR_LOADING));
+    renderer.displayBuffer();
     auto xtc = loadXtc(initialBookPath);
     if (!xtc) {
       onGoBack();
@@ -122,6 +128,8 @@ void ReaderActivity::onEnter() {
     }
     onGoToXtcReader(std::move(xtc));
   } else if (isTxtFile(initialBookPath)) {
+    GUI.drawPopup(renderer, tr(STR_LOADING));
+    renderer.displayBuffer();
     auto txt = loadTxt(initialBookPath);
     if (!txt) {
       onGoBack();
@@ -129,6 +137,8 @@ void ReaderActivity::onEnter() {
     }
     onGoToTxtReader(std::move(txt));
   } else {
+    GUI.drawPopup(renderer, tr(STR_LOADING));
+    renderer.displayBuffer();
     auto epub = loadEpub(initialBookPath);
     if (!epub) {
       onGoBack();
