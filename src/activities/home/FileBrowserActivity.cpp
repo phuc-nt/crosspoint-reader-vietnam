@@ -150,12 +150,21 @@ void FileBrowserActivity::clearFileMetadata(const std::string& fullPath) {
 }
 
 void FileBrowserActivity::loop() {
-  // Long press BACK (1s+) goes to root folder
-  if (mappedInput.isPressed(MappedInputManager::Button::Back) && mappedInput.getHeldTime() >= GO_HOME_MS &&
-      basepath != "/") {
-    basepath = "/";
-    loadFiles();
-    selectorIndex = 0;
+  // Long press BACK (1s+): at root → cycle sort mode, elsewhere → go to root
+  if (mappedInput.isPressed(MappedInputManager::Button::Back) && mappedInput.getHeldTime() >= GO_HOME_MS) {
+    if (basepath == "/") {
+      // Already at root — use long-press to cycle sort
+      cycleSortMode();
+      // Wait for button release to avoid repeat
+      while (mappedInput.isPressed(MappedInputManager::Button::Back)) {
+        delay(10);
+        mappedInput.update();
+      }
+    } else {
+      basepath = "/";
+      loadFiles();
+      selectorIndex = 0;
+    }
     return;
   }
 
@@ -239,14 +248,9 @@ void FileBrowserActivity::loop() {
 
   int listSize = static_cast<int>(entries.size());
 
-  // Long press UP → cycle sort mode
   buttonNavigator.onPreviousRelease([this, listSize] {
-    if (mappedInput.getHeldTime() >= SORT_TOGGLE_MS) {
-      cycleSortMode();
-    } else {
-      selectorIndex = ButtonNavigator::previousIndex(static_cast<int>(selectorIndex), listSize);
-      requestUpdate();
-    }
+    selectorIndex = ButtonNavigator::previousIndex(static_cast<int>(selectorIndex), listSize);
+    requestUpdate();
   });
 
   buttonNavigator.onNextRelease([this, listSize] {
