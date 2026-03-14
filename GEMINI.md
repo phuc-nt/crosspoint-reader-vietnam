@@ -44,7 +44,6 @@ Your primary mission is maintaining the Vietnamese fork of CrossPoint Reader.
 - If device is in crash loop, it may appear on a **different USB port** than expected
 - Use `addr2line` to decode crash addresses from serial output
 
-## Project Structure
 ```
 ├── pm_docs/              # PM documentation (vision, dev plan, dev log)
 ├── lib/
@@ -57,6 +56,11 @@ Your primary mission is maintaining the Vietnamese fork of CrossPoint Reader.
 │   └── hal/              # Hardware Abstraction Layer
 ├── src/
 │   ├── activities/       # UI screens (Activity lifecycle pattern)
+│   │   ├── reader/       # Reader activities + BookmarkListActivity
+│   │   └── home/         # Home, FileBrowser, Settings activities
+│   ├── BookmarkStore.*   # Per-book bookmark persistence (JSON on SD)
+│   ├── ReadingStats.*    # Reading time/pages tracking (singleton)
+│   ├── FileBrowserMetaCache.* # Epub title/author cache for file browser
 │   ├── fontIds.h         # Font ID constants
 │   └── main.cpp          # Entry point, global font loading
 ├── scripts/
@@ -103,9 +107,12 @@ pio run -t upload          # Build + flash to device
 - Use `LOG_INF/LOG_DBG/LOG_ERR` for logging (not Serial.print)
 - Use `Storage` singleton for SD card I/O
 - Use `GUI` singleton for UI rendering
+- Use `READING_STATS` for reading statistics, `BROWSER_META` for file browser metadata cache
 - No hardcoded screen dimensions — use `renderer.getScreenWidth()/getScreenHeight()`
 - Free all memory in `onExit()` that was allocated in `onEnter()`
 - Prefer `static constexpr` for compile-time constants
+- Singleton pattern: `static MyClass instance;` + `getInstance()` + `#define MACRO getInstance()`
+- **Data files on SD**: Store in `/.crosspoint/` directory (bookmarks, stats, metadata cache)
 
 ## PM Documentation
 - **Vision**: `pm_docs/VISION.md` — Tiền đề, mục tiêu, scope (ít thay đổi)

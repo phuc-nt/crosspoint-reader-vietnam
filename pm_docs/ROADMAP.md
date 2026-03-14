@@ -10,8 +10,11 @@
 | Đợt | Tên | Trạng thái | Ngày |
 |-----|-----|-----------|------|
 | 01 | Vietnamese Localization & Fonts | ✅ Done | 07-08/03/2026 |
-| 02 | Home Screen Progress & UI | 🟡 Planning | 08/03/2026 |
-| 03 | Polish & Release | ⬜ Backlog | — |
+| 02 | Home Screen Progress & UI | ✅ Done | 08/03/2026 |
+| 03 | Quick Wins + Loading Indicator | ✅ Done | 14/03/2026 |
+| 04 | Core Features (Bookmarks, Stats, Metadata) | ✅ Done | 14/03/2026 |
+| 05 | Polish + Remaining | ⬜ Backlog | — |
+| 06 | Network + Release | ⬜ Backlog | — |
 
 ---
 
