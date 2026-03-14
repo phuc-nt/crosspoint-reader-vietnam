@@ -97,6 +97,11 @@ bool CrossPointSettings::loadFromFile() {
         statusBarProgressBar = HIDE_PROGRESS;
         resave = true;
       }
+      // Force-override: show book cover on sleep screen
+      if (sleepScreen != COVER) {
+        sleepScreen = COVER;
+        resave = true;
+      }
 
       if (result && resave) {
         if (saveToFile()) {
