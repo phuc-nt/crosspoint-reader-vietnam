@@ -243,6 +243,81 @@ struct Callback { void* ctx; void (*fn)(void*); };
 
 When a template is necessary, limit instantiations: use explicit template instantiation in a `.cpp` file to prevent the compiler from generating duplicates across translation units.
 
+#### ⚠️ CRITICAL: Known Crash/Brick Pitfalls (MUST READ)
+
+The following bugs have **bricked real devices** and caused crash loops requiring physical USB recovery. **NEVER repeat these mistakes.**
+
+##### 1. Static Global Constructors MUST NOT Allocate Heap
+
+**Severity**: DEVICE BRICK — unrecoverable crash loop after deep sleep
+
+C++ static globals (e.g. `static UITheme instance;`) have their constructors called during `_GLOBAL__sub_I` (before `setup()`). After deep sleep wakeup, the ESP32-C3 heap is **NOT fully initialized** at this point. Any heap allocation (`new`, `make_unique`, `std::string`, `std::vector`) in a static constructor will corrupt memory and cause a **Store Access Fault** crash loop.
+
+```cpp
+// WRONG — will crash on deep sleep wakeup:
+class UITheme {
+  static UITheme instance;  // constructor runs before setup()
+  std::unique_ptr<BaseTheme> theme;
+public:
+  UITheme() { theme = std::make_unique<BaseTheme>(); }  // HEAP ALLOC IN GLOBAL INIT!
+};
+
+// CORRECT — defer initialization to an explicit init/reload method:
+UITheme::UITheme() {
+  // Intentionally empty — NO heap allocations here
+}
+void UITheme::reload() {
+  // Called from setup() after heap is ready
+  theme = std::make_unique<BaseTheme>();
+}
+```
+
+**Rule**: ALL static global constructors MUST be trivial (no-op). Defer any heap allocation to a method called explicitly from `setup()`.
+
+**How to detect**: Use `addr2line` to decode crash addresses. If the trace shows `_GLOBAL__sub_I` → `do_global_ctors`, a static constructor is the culprit:
+```bash
+~/.platformio/packages/toolchain-riscv32-esp/bin/riscv32-esp-elf-addr2line \
+  -e .pio/build/default/firmware.elf -f -p <MEPC_ADDRESS> <RA_ADDRESS>
+```
+
+##### 2. Never Call Deep Sleep on USB Power Wakeup
+
+**Severity**: DEVICE BRICK — crash loop when USB cable is connected
+
+If the firmware detects `WakeupReason::AfterUSBPower` and immediately calls `powerManager.startDeepSleep()`, it creates an infinite crash loop: boot → detect USB → sleep → wake from USB → boot → ... The device becomes unresponsive while connected to USB.
+
+```cpp
+// WRONG:
+case HalGPIO::WakeupReason::AfterUSBPower:
+  powerManager.startDeepSleep(gpio);  // CRASH LOOP!
+  break;
+
+// CORRECT:
+case HalGPIO::WakeupReason::AfterUSBPower:
+  break;  // Just proceed with normal boot
+```
+
+##### 3. Changing Defaults in CrossPointSettings.h Has NO Effect on Existing Devices
+
+**Severity**: Silent failure — settings appear unchanged after firmware update
+
+Settings are persisted to SD card (`/.crosspoint/settings.json`). When `loadFromFile()` runs, saved values **override all defaults** in `CrossPointSettings.h`. Changing a default value only affects brand new devices with no settings file.
+
+```cpp
+// WRONG — this has NO effect on devices with existing settings:
+uint8_t statusBarProgressBar = HIDE_PROGRESS;  // Changed from BOOK_PROGRESS
+
+// CORRECT — force-override in loadFromFile() after loading:
+bool CrossPointSettings::loadFromFile() {
+    // ... load from JSON ...
+    // Force-override specific settings:
+    if (statusBarProgressBar != HIDE_PROGRESS) {
+        statusBarProgressBar = HIDE_PROGRESS;
+        resave = true;  // Persist the override to SD
+    }
+}
+```
+
 ---
 
 ### Error Handling Philosophy

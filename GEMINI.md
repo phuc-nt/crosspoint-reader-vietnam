@@ -17,6 +17,33 @@ Your primary mission is maintaining the Vietnamese fork of CrossPoint Reader.
 - **Single-core RISC-V** — no true parallelism, only cooperative multitasking.
 - **No exceptions, no RTTI** — error handling via return codes + LOG_ERR.
 
+## ⚠️ CRITICAL: Rules That Prevent Device Bricking
+
+> **These rules exist because violating them has BRICKED REAL DEVICES, requiring physical USB recovery. NEVER break these rules.**
+
+### 1. Static Global Constructors: NO HEAP ALLOCATION
+- `static MyClass instance;` → constructor runs **before `setup()`** during C++ global init
+- After deep sleep wakeup, **heap is NOT ready** at this point
+- **ANY** heap allocation (`new`, `make_unique`, `std::string`, `std::vector`) in a static constructor → **Store Access Fault → crash loop → BRICKED DEVICE**
+- **FIX**: Constructor must be a no-op. Defer all init to an explicit method called from `setup()`
+- **Example**: `UITheme::UITheme()` must be empty; `UITheme::reload()` does the actual init
+
+### 2. Never Deep Sleep on USB Power Wakeup
+- `WakeupReason::AfterUSBPower` + `startDeepSleep()` = **infinite crash loop**
+- Device becomes unresponsive while USB cable is connected
+- **FIX**: Just `break;` — let the device boot normally
+
+### 3. Changing Defaults in CrossPointSettings.h Does NOT Work
+- Settings saved on SD card **override ALL defaults** in code
+- Changing `uint8_t foo = NEW_VALUE` has **zero effect** on existing devices
+- **FIX**: Force-override in `CrossPointSettings::loadFromFile()` after loading, then set `resave = true`
+
+### 4. Before Flashing: Always Verify
+- Always check USB port: `ls /dev/cu.usb*`
+- Always monitor serial after flash: `pio device monitor`
+- If device is in crash loop, it may appear on a **different USB port** than expected
+- Use `addr2line` to decode crash addresses from serial output
+
 ## Project Structure
 ```
 ├── pm_docs/              # PM documentation (vision, dev plan, dev log)
@@ -66,7 +93,8 @@ pio run -t upload          # Build + flash to device
 - **Vietnamese Unicode ranges** already included in `fontconvert.py`:
   - U+01A0-01A1 (Ơ/ơ), U+01AF-01B0 (Ư/ư)
   - U+1EA0-1EF9 (all precomposed Vietnamese diacritics)
-- **3 Vietnamese fonts**: Literata (serif), Be Vietnam Pro (sans-serif), Vollkorn (classic serif)
+- **2 Vietnamese fonts**: Literata (serif), Be Vietnam Pro (sans-serif, default)
+- **Vollkorn removed** — only Classic theme, no Lyra themes
 - **All fonts are SIL OFL licensed** — safe for firmware embedding
 - **Upstream sync**: Keep changes minimal and focused on Vietnamese support to ease merging
 
@@ -91,3 +119,4 @@ pio run -t upload          # Build + flash to device
 - See `docs/i18n.md` for I18n system documentation
 - See `docs/contributing/` for architecture and development workflow
 - See `SCOPE.md` for feature scope boundaries
+
